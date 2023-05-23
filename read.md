@@ -1,0 +1,43 @@
+#Q1. Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js. It manages relationships between data, provides schema validation, and is used to translate between objects in code and the representation of those objects in MongoDB. MongoDB is a schema-less NoSQL document database. It means you can store JSON documents in it, and the structure of these documents can vary as it is not enforced like SQL databases. This is one of the advantages of using NoSQL as it speeds up application development and reduces the complexity of deployments.
+
+#Q2: Mongodb filter aggregation is added in version 3.2, it is used to select a subset of the array and return the result using the specified condition. The filter operator will return an array of elements that matched the specified condition, it will return the elements in the original order. We need to pass input, as and cond parameters with filter operator, input and cond are mandatory parameters while “as” is optional parameter while using filter operator in MongoDB. At the time of using the filter operator in MongoDB we need to use $ sign before the filter keyword. • In the above example, we can see that second documents have an empty set of array, so after using the filter on this field it will return the empty array set. • I suppose we have used a filter on the field which did not contain the array elements then the filter operator will return an error in the output. • If the field of array element contains the null values instead of array elements then the result of this array filed using filter operator is null values. • Using the filter operator we have also use the condition to filter the array elements to retrieve the data. • We can use the below conditional operator on the array field using the filter operator in MongoDB.
+
+Greater than ((>) or $gt)
+less than ((<) or $lt)
+Greater than equal to ((>=) or $gte)
+Less than equal to ((<=) or $lte) Using the above condition we can retrieve the data as per the condition which was we have used in our query. I suppose we have applied a filter on the field which was not present in the collection then the result of the array element contains the null value.
+#Q3. Instance methods are methods that perform some action on a specific instance of a Model rather than the entire Model itself. Methods that perform some action on the entire Model are known as static methods. Static methods are also come in handy in their own share of situations but if you’re looking for some functionality on an individual database entry itself then you’ll be wanting to deal with instance methods. If the word ‘Instance’ is confusing you, just think about an Instance as a single document because that what it really is. The term instance is common programming terminology but it’s important to not get too wrapped up in terminology and more important to understand the concept. o do this we’d create a custom method on our schema that could create the full name for us and it would be available on every instance through the model. Let’s see how we’d do that: 1 2 3 userSchema.methods.getFullName = function() { return this.firstName + this.lastName } Notice how we used the keyword this which refers to the specific instance of the Model, in this cas it refers to a specific User. Now let’s see how we’d actually use this instance method:
+
+let model = new UserModel({ firstName: 'Alfred', lastName: 'Tompkins' })
+
+let fullName = model.getFullName() console.log(fullName) // Result: Alfred Tompkins
+
+Let’s go over a second example to cement our understanding. In this second example we’ll show you the full schema first. In this example we have a schema representing a grocery store product and we’ll have an instance method on each product that can find products in the same department. Let’s take a look at the productSchema first: 1 var productSchema = new Schema({ name: String, department: String }); Next we define a function on the methods object of the schema. The function uses the find method to find Products who have a matching department. productSchema.methods.findProductsInSameDepartment = function() { return this.model('Product').find({ department: this.department }); };
+
+Now we let’s finally use this instance method: var Product = mongoose.model('Product', productSchema); var milk = new Product({ department: 'Dairy' });
+
+milk.findProductsInSameDepartment(function(err, dairyProducts) { console.log(dairyProducts); });
+
+Q4. A comparison operator compares two expressions and fetched documents from mongodb collection. In this page we are going to discuss about the comparison operators and usage of comparison operators. $ne," "$gt," "$lt," "$gte," and "$lte"
+
+is not equal- $ne (>) greater than - $gt (<) less than - $lt (>=) greater than equal to - $gte (<= ) less than equal to - $lte
+
+Document-oriented database, MongoDB is a type of NoSQL database. Different types of operators are available in MongoDB for usage when interacting with the database. Operators are specialized symbols or keywords that mainly tell a compiler or an interpreter how to perform logical or mathematical operations. This answer provides a thorough explanation of the comparison operators in MongoDB. We'll use the following database to perform different comparison operators where the database name is educative and has a collection named courses.
+
+The $ne operator The $ne stands for "not equal." As the name implies, it is used to find all values that are not equal to a specified value. //query db.courses.find({"_id": { $ne: 11}}).pretty() //output [ { _id: 10, course_name: 'python', hours: 10 }, { _id: 12, course_name: 'java', hours: 12 } ]
+
+The $gt operator The $gt stands for "greater than." As the name implies, it is used to find the value that is greater than the specified value. //query db.courses.find({"_id":·{·$gt:·11}}).pretty() //output [·{·_id:·12,·course_name:·'java',·hours:·12·}·]
+
+The $lt operator The $lt stands for "less." As the name implies, it is used to find the value that is less than the specified value. //query b.courses.find({"_id":·{·$lt:·11}}).pretty() //output [·{·_id:·10,·course_name:·'python',·hours:·10·}·]
+
+The $gte operator The $gte stands for "greater than equal." As the name implies, it is used to find the value that is greater or equal to the specified value.
+
+//query b.courses.find({"_id": { $gte: 11}}).pretty() //output [ { _id: 11, course_name: 'C++', hours: 15 }, { _id: 12, course_name: 'java', hours: 12 } ]
+
+The $lte operator The $lte stands for "less than equal." As the name implies, it is used to find the value that is less than or equal to the specified value. //query db.courses.find({"_id": { $lte: 11}}).pretty() //output [ { _id: 10, course_name: 'python', hours: 10 }, { _id: 11, course_name: 'C++', hours: 15 } ]
+
+#Q5
+
+If the field holds an array, then the $in operator selects the documents whose field holds an array that contains at least one element that matches a value in the specified array (for example, , , and so on). The following updateMany() operation sets the exclude field to false when the tags array has at least one element that matches either "home" or "school". db.inventory.updateMany( { tags: { $in: [ "home", "school" ] } }, { $set: { exclude: false } } ) Example output: { item: 'Pens', quantity: 350, tags: [ 'school', 'office' ], exclude: false }, { item: 'Erasers', quantity: 15, tags: [ 'school', 'home' ], exclude: false }, { item: 'Maps', tags: [ 'office', 'storage' ] }, { item: 'Books', quantity: 5, tags: [ 'school', 'storage', 'home' ], exclude: false }
+
+If the field holds an array, then the $nin operator selects the documents whose field holds an array with no element equal to a value in the specified array (for example, , , and so on). Example Suppose we have a collection called products with the following documents: { "_id" : 1, "prod" : "Bat", "sizes" : [ "S", "M", "XL", "XXL" ] } { "_id" : 2, "prod" : "Hat", "sizes" : [ "S", "L", "XL" ] } { "_id" : 3, "prod" : "Cap", "sizes" : [ "XS", "S", "M", "L", "XL" ] } { "_id" : 4, "prod" : "Shirt", "sizes" : "L" } { "_id" : 5, "prod" : "Jeans", "sizes" : null } { "_id" : 6, "prod" : "Shorts" } We can use the $nin operator to select just those documents that don’t have specific _id values. Example code: db.products.find({ _id: { $nin: [ 1, 2, 3 ] } }) Result: { "_id" : 4, "prod" : "Shirt", "sizes" : "L" } { "_id" : 5, "prod" : "Jeans", "sizes" : null } { "_id" : 6, "prod" : "Shorts" } In this case, we only wanted documents that don’t contain an _id value of 1, 2, or 3.
